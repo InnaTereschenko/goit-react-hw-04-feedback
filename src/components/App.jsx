@@ -1,69 +1,71 @@
-import { Component } from 'react';
+import { useState } from 'react';
+
+// import { Component } from 'react';
 import Section from './Section/Section';
 import Statistics from './Statistics/Statistics';
 import FeedbackButtons from './FeedbackButtons/FeedbackButtons';
 import Notification from './Notification/Notification';
 
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+export const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  // console.log(good, neutral, bad);
+
+  const onLeaveFeedback = evt => {
+   
+        if (evt === 'Good') {
+      setGood (good + 1);
+    } else if (evt === 'Neutral') {
+      setNeutral (neutral + 1);
+    } else if (evt === 'Bad') {
+      setBad (bad + 1);
+    }
   };
 
-  onLeaveFeedback = evt => {
-    
-  this.setState(prevState => {
-    let newState = {};
-
-    if (evt === 'Good') {
-      newState.good = prevState.good + 1;
-    } else if (evt === 'Neutral') {
-      newState.neutral = prevState.neutral + 1;
-    } else if (evt === 'Bad') {
-      newState.bad = prevState.bad + 1;
-    }
-
-    return newState;
-  });
-};
  
-  onTotal = () => {
-         return this.state.good + this.state.neutral + this.state.bad;
+ const onTotal = () => {
+         return (good + neutral + bad);
 };
 
-  onPercentage = () => {
-    if (this.state.good === 0) {
+  const onPercentage = () => {
+    if (good === 0) {
       return 0;
     }
     return (
-      Math.round((this.state.good / this.onTotal()) * 100)
-    );
-}
+      Math.round((good / onTotal()) * 100)
+    )
+  }
 
-  render() {
-    return (
+
+
+return (
       <div>
         <Section title="Please leave feedback">
           <FeedbackButtons
             options={['Good', 'Neutral', 'Bad']}
-            onLeaveFeedback={this.onLeaveFeedback}
+            onLeaveFeedback={onLeaveFeedback}
           />
         </Section>
 
         <Section title="Statistics">
-          {this.onTotal() !== 0 ?
+          {onTotal() !== 0 ?
             (<Statistics
-              good={this.state.good}
-              neutral={this.state.neutral}
-              bad={this.state.bad}
-              total={this.onTotal()}
-              positiveFedback={this.onPercentage()}
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={onTotal()}
+              positiveFedback={onPercentage()}
             />) :
             (<Notification message='There is no feedback' ></Notification>)}
         </Section>
       </div>
-    );
-  }
+    ); 
+
+
 }
+
+ 
+
 
